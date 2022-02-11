@@ -1,4 +1,5 @@
 const request = require("phin");
+//TODO: replace deprecated querystring with URLSearchParams
 const querystring = require("querystring");
 
 const GA_ENDPOINT = `https://www.google-analytics.com/collect`;
