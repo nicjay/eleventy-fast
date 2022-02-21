@@ -36,7 +36,7 @@ const csso = require("csso");
  * Optimizes HTML
  * Optimizes AMP
  */
-
+//TODO: Reconfigure for Tailwind CSS
 const purifyCss = async (rawContent, outputPath) => {
   let content = rawContent;
   if (
@@ -113,7 +113,7 @@ const optimizeAmp = async (rawContent, outputPath) => {
 module.exports = {
   initArguments: {},
   configFunction: async (eleventyConfig, pluginOptions = {}) => {
-    eleventyConfig.addTransform("purifyCss", purifyCss);
+    //eleventyConfig.addTransform("purifyCss", purifyCss); //TODO: Reconfigure for Tailwind CSS
     eleventyConfig.addTransform("minifyHtml", minifyHtml);
     eleventyConfig.addTransform("optimizeAmp", optimizeAmp);
   },

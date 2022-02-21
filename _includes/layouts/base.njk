@@ -53,21 +53,24 @@
     <!-- Notably iOS UAs also contain Mac OS X -->
     <script csp-hash>if (/Mac OS X/.test(navigator.userAgent))document.documentElement.classList.add('apple')
     </script>
-    <!-- css is inserted by optimize-html custom plugin -->
+    <!-- css is inserted by optimize-html custom plugin --><!-- TODO disabled temporarily -->
+    <!-- tailwind test -->
+    <link rel="stylesheet" href="/style.css">
   </head>
   <body>
     <header>
       <nav>
-        <div id="nav">
+        <div id="nav" class="flex justify-center">
           <h1><a href="{{ '/' | url }}" title="Homepage">{{ metadata.title }}</a></h1>
           {#- Read more about `eleventy-navigation` at https://www.11ty.dev/docs/plugins/navigation/ #}
           {%- for entry in collections.all | eleventyNavigation %}
-            <a href="{{ entry.url | url }}">{{ entry.title }}</a>
+            <div class="max-w-xs px-1 py-1 rounded-lg border-2"><a class="underline text-slate-700" href="{{ entry.url | url }}">{{ entry.title }}</a></div>
           {%- endfor %}
         </div>
-        <div id="reading-progress" aria-hidden="true"></div>
       </nav>
-      <h1>{{ title }}</h1>
+      <div class="p-4 m-4 bg-emerald-300 h-full">
+          <h1 text-green-900>{{ title }}</h1>
+      </div>
       {% block extraArticleHeader %}{% endblock %}
       <dialog id="message"></dialog>
       {% if googleanalytics %}

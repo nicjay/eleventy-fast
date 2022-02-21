@@ -56,7 +56,7 @@ const pluginNavigation = require("@11ty/eleventy-navigation");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
 const localImages = require("./third_party/eleventy-plugin-local-images/.eleventy.js");
-const CleanCSS = require("clean-css");
+//const CleanCSS = require("clean-css");
 const GA_ID = require("./_data/metadata.json").googleAnalyticsId;
 const { cspDevMiddleware } = require("./_11ty/apply-csp.js");
 
@@ -139,9 +139,9 @@ module.exports = function (eleventyConfig) {
     return encodeURIComponent(str);
   });
 
-  eleventyConfig.addFilter("cssmin", function (code) {
-    return new CleanCSS({}).minify(code).styles;
-  });
+  // eleventyConfig.addFilter("cssmin", function (code) {
+  //   return new CleanCSS({}).minify(code).styles;
+  // });
 
   eleventyConfig.addFilter("readableDate", (dateObj) => {
     return DateTime.fromJSDate(dateObj, { zone: "utc" }).toFormat(
@@ -176,7 +176,7 @@ module.exports = function (eleventyConfig) {
   });
   eleventyConfig.addCollection("tagList", require("./_11ty/getTagList"));
   eleventyConfig.addPassthroughCopy("img");
-  eleventyConfig.addPassthroughCopy("css");
+  //eleventyConfig.addPassthroughCopy("css");
   // We need to copy cached.js only if GA is used
   eleventyConfig.addPassthroughCopy(GA_ID ? "js" : "js/*[!cached].*");
   eleventyConfig.addPassthroughCopy("fonts");
@@ -185,6 +185,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addWatchTarget("./js/");
   // We need to rebuild on CSS change to inline it.
   eleventyConfig.addWatchTarget("./css/");
+  eleventyConfig.addWatchTarget('./tailwind.config.js')
   // Unfortunately this means .eleventyignore needs to be maintained redundantly.
   // But without this the JS build artefacts doesn't trigger a build.
   eleventyConfig.setUseGitIgnore(false);
