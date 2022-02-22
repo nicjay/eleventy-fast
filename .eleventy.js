@@ -63,10 +63,6 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
   eleventyConfig.addPlugin(pluginNavigation);
-  eleventyConfig.addPlugin(require("./_11ty/img-dim.js"));
-  eleventyConfig.addPlugin(require("./_11ty/json-ld.js"));
-  eleventyConfig.addPlugin(require("./_11ty/optimize-html.js"));
-  eleventyConfig.addPlugin(require("./_11ty/apply-csp.js"));
   eleventyConfig.addPlugin(localImages, {
     distPath: "_site",
     assetPath: "/img/remote",
@@ -74,6 +70,10 @@ module.exports = function (eleventyConfig) {
       "img,amp-img,amp-video,meta[property='og:image'],meta[name='twitter:image'],amp-story",
     verbose: false,
   });
+  eleventyConfig.addPlugin(require("./_11ty/img-dim.js"));
+  eleventyConfig.addPlugin(require("./_11ty/json-ld.js"));
+  eleventyConfig.addPlugin(require("./_11ty/optimize-html.js"));
+  eleventyConfig.addPlugin(require("./_11ty/apply-csp.js"));
 
   eleventyConfig.setDataDeepMerge(true);
   eleventyConfig.addLayoutAlias("post", "layouts/post.njk");
