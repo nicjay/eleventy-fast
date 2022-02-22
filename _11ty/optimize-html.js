@@ -26,8 +26,14 @@ const ampOptimizer = AmpOptimizer.create({
   imageBasePath: "./_site/",
   //verbose: true,
 });
-const PurgeCSS = require("purgecss").PurgeCSS;
-const csso = require("csso");
+
+const postcss = require("postcss");
+const purgecss = require("@fullhuman/postcss-purgecss");
+const cssnano = require("cssnano");
+const autoprefixer = require("autoprefixer");
+const tailwindcss = require("tailwindcss");
+const tailwindConfig = require("../tailwind.config.js");
+
 
 /**
  * Inlines the CSS.
@@ -37,49 +43,36 @@ const csso = require("csso");
  * Optimizes AMP
  */
 
-const purifyCss = async (rawContent, outputPath) => {
+const optimizeCss = async (rawContent, outputPath) => {
   let content = rawContent;
-  if (
-    outputPath &&
-    outputPath.endsWith(".html") &&
-    !isAmp(content) &&
-    !/data-style-override/.test(content)
-  ) {
-    let before = require("fs").readFileSync("css/main.css", {
-      encoding: "utf-8",
-    });
+  if (outputPath && outputPath.endsWith(".html") && !isAmp(content) && !/data-style-override/.test(content)) {
 
-    before = before.replace(
-      /@font-face {/g,
-      "@font-face {font-display:optional;"
-    );
+    let css = require("fs").readFileSync("css/main.css", { encoding: "utf-8" });
+    css = css.replace(/@font-face {/g, "@font-face {font-display:optional;");
 
-    const purged = await new PurgeCSS().purge({
-      content: [
-        {
-          raw: rawContent,
-          extension: "html",
-        },
-      ],
-      css: [
-        {
-          raw: before,
-        },
-      ],
-      /*extractors: [
-        {
-          extractor: require("purge-from-html").extract,
-          extensions: ["html"],
-        },
-      ],*/
-      fontFace: true,
-      variables: true,
-    });
-
-    const after = csso.minify(purged[0].css).css;
-    //console.log("CSS reduction", before.length - after.length);
-
-    content = content.replace("</head>", `<style>${after}</style></head>`);
+    await postcss([
+      tailwindcss(tailwindConfig.dynamicContent([{ raw: content, extension: "html" }])), //Run Tailwind on incoming content
+      autoprefixer,
+      /**
+       * Purge is incorrectly removing certain Tailwind elements like media queries, .bg-\[url\(\/img\/grid\.svg\)\]
+       * Tailwind already optimizes well, but might want to purge other custom CSS...
+      **/
+      // purgecss({
+      //   content: [{ raw: content, extension: "html" }],
+      //   css: [{ raw: css }],
+      //   fontFace: false,
+      //   variables: false,
+      //   extractors: [{
+      //       extractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
+      //       extensions: ["html"],
+      //   }],
+      // }),
+      cssnano({ preset: "default" }), //Minify CSS
+    ])
+    .process(css, { from: "css/main.css" })
+    .then((minified) => {
+        content = content.replace("</head>", `<style>${minified.css}</style></head>`); //Add inline style
+      });
   }
   return content;
 };
@@ -113,7 +106,7 @@ const optimizeAmp = async (rawContent, outputPath) => {
 module.exports = {
   initArguments: {},
   configFunction: async (eleventyConfig, pluginOptions = {}) => {
-    eleventyConfig.addTransform("purifyCss", purifyCss);
+    eleventyConfig.addTransform("optimizeCss", optimizeCss);
     eleventyConfig.addTransform("minifyHtml", minifyHtml);
     eleventyConfig.addTransform("optimizeAmp", optimizeAmp);
   },
