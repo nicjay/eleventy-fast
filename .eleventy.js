@@ -170,7 +170,6 @@ module.exports = function (eleventyConfig) {
   });
   eleventyConfig.addCollection("tagList", require("./_11ty/getTagList"));
   eleventyConfig.addPassthroughCopy("img");
-  //eleventyConfig.addPassthroughCopy("css");
   // We need to copy cached.js only if GA is used
   eleventyConfig.addPassthroughCopy(GA_ID ? "js" : "js/*[!cached].*");
   eleventyConfig.addPassthroughCopy("fonts");
