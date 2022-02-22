@@ -38,8 +38,8 @@ const CSP = {
     // Script from same-origin and inline-hashes.
     // If you need to add an external host for scripts you need to add an item like 'https://code.jquery.com/jquery-3.6.0.slim.min.js' to this list.
     ["script-src", SELF, /* Replaced by apply-csp.js plugin */ "HASHES"],
-    // Inline CSS is allowed. TODO: temp stylesheet support for Tailwind experiment
-    ["style-src", SELF, quote("unsafe-inline")],
+    // Inline CSS is allowed. (Add SELF to allow stylesheets)
+    ["style-src", quote("unsafe-inline")],
     // Images may also come from data-URIs.
     ["img-src", SELF, "data:"],
 

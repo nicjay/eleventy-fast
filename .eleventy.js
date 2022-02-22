@@ -56,7 +56,6 @@ const pluginNavigation = require("@11ty/eleventy-navigation");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
 const localImages = require("./third_party/eleventy-plugin-local-images/.eleventy.js");
-//const CleanCSS = require("clean-css");
 const GA_ID = require("./_data/metadata.json").googleAnalyticsId;
 const { cspDevMiddleware } = require("./_11ty/apply-csp.js");
 
@@ -64,7 +63,10 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
   eleventyConfig.addPlugin(pluginNavigation);
-
+  eleventyConfig.addPlugin(require("./_11ty/img-dim.js"));
+  eleventyConfig.addPlugin(require("./_11ty/json-ld.js"));
+  eleventyConfig.addPlugin(require("./_11ty/optimize-html.js"));
+  eleventyConfig.addPlugin(require("./_11ty/apply-csp.js"));
   eleventyConfig.addPlugin(localImages, {
     distPath: "_site",
     assetPath: "/img/remote",
@@ -73,10 +75,6 @@ module.exports = function (eleventyConfig) {
     verbose: false,
   });
 
-  eleventyConfig.addPlugin(require("./_11ty/img-dim.js"));
-  eleventyConfig.addPlugin(require("./_11ty/json-ld.js"));
-  eleventyConfig.addPlugin(require("./_11ty/optimize-html.js"));
-  eleventyConfig.addPlugin(require("./_11ty/apply-csp.js"));
   eleventyConfig.setDataDeepMerge(true);
   eleventyConfig.addLayoutAlias("post", "layouts/post.njk");
   eleventyConfig.addNunjucksAsyncFilter(
@@ -138,10 +136,6 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addFilter("encodeURIComponent", function (str) {
     return encodeURIComponent(str);
   });
-
-  // eleventyConfig.addFilter("cssmin", function (code) {
-  //   return new CleanCSS({}).minify(code).styles;
-  // });
 
   eleventyConfig.addFilter("readableDate", (dateObj) => {
     return DateTime.fromJSDate(dateObj, { zone: "utc" }).toFormat(
