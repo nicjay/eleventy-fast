@@ -1,4 +1,4 @@
-let config = {
+module.exports = {
   content: [],
   theme: {
     fontFamily: {
@@ -9,9 +9,3 @@ let config = {
   },
   plugins: [],
 };
-
-// Pass in raw content from 11ty at build time
-// https://tailwindcss.com/docs/content-configuration#configuring-raw-content
-config.dynamicContent = (content) => ({ ...config, content });
-
-module.exports = config;

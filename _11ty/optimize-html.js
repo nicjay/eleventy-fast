@@ -50,30 +50,24 @@ const optimizeCss = async (rawContent, outputPath) => {
     let css = require("fs").readFileSync("css/main.css", { encoding: "utf-8" });
     css = css.replace(/@font-face {/g, "@font-face {font-display:optional;");
 
-    await postcss([
-      tailwindcss(tailwindConfig.dynamicContent([{ raw: content, extension: "html" }])), //Run Tailwind on incoming content
+    /**
+     * Shallow copy Tailwind's config, merging 11ty raw content
+     * See: https://tailwindcss.com/docs/content-configuration#configuring-raw-content
+     * TODO: Consider adding PurgeCSS plugin - has bugs with Tailwind and purge ignore comments not working...
+     */
+    const postcssPlugins = [
+      tailwindcss({...tailwindConfig, content: [{ raw: content, extension: "html" }]}),
       autoprefixer,
-      /**
-       * Purge is incorrectly removing certain Tailwind elements like media queries, .bg-\[url\(\/img\/grid\.svg\)\]
-       * Tailwind already optimizes well, but might want to purge other custom CSS...
-      **/
-      // purgecss({
-      //   content: [{ raw: content, extension: "html" }],
-      //   css: [{ raw: css }],
-      //   fontFace: false,
-      //   variables: false,
-      //   extractors: [{
-      //       extractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
-      //       extensions: ["html"],
-      //   }],
-      // }),
       cssnano({ preset: "default" }), //Minify CSS
-    ])
-    .process(css, { from: "css/main.css" })
-    .then((minified) => {
-        content = content.replace("</head>", `<style>${minified.css}</style></head>`); //Add inline style
+    ]
+
+    await postcss(postcssPlugins)
+      .process(css, { from: "css/main.css" })
+      .then((processed) => {
+        content = content.replace("</head>", `<style>${processed.css}</style></head>`); //Add inline style
       });
   }
+
   return content;
 };
 
