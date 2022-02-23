@@ -55,7 +55,6 @@ const pluginSyntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const pluginNavigation = require("@11ty/eleventy-navigation");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
-const localImages = require("./third_party/eleventy-plugin-local-images/.eleventy.js");
 const GA_ID = require("./_data/metadata.json").googleAnalyticsId;
 const { cspDevMiddleware } = require("./_11ty/apply-csp.js");
 
@@ -63,13 +62,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
   eleventyConfig.addPlugin(pluginNavigation);
-  eleventyConfig.addPlugin(localImages, {
-    distPath: "_site",
-    assetPath: "/img/remote",
-    selector:
-      "img,amp-img,amp-video,meta[property='og:image'],meta[name='twitter:image'],amp-story",
-    verbose: false,
-  });
+  eleventyConfig.addPlugin(require("./_11ty/local-images.js"));
   eleventyConfig.addPlugin(require("./_11ty/img-dim.js"));
   eleventyConfig.addPlugin(require("./_11ty/json-ld.js"));
   eleventyConfig.addPlugin(require("./_11ty/optimize-html.js"));

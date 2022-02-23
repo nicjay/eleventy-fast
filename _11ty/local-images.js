@@ -1,12 +1,40 @@
+/**
+ * Copyright (c) 2019 Robb Owen
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+//Based on 'eleventy-high-performance-blog' implementation which itself is adapted from 'eleventy-plugin-local-images'
+
 const fs = require("fs-extra");
 const path = require("path");
 const { JSDOM } = require("jsdom");
 const fetch = require("node-fetch");
 const sh = require("shorthash");
 const fileType = require("file-type");
-const metadata = require("../../_data/metadata.json");
+const metadata = require("../_data/metadata.json");
 
-let config = { distPath: "_site", verbose: false, attribute: "src" };
+let config = {
+  distPath: "_site",
+  assetPath: "/img/remote",
+  selector: "img,amp-img,amp-video,meta[property='og:image'],meta[name='twitter:image'],amp-story",
+  verbose: false
+};
 
 const downloadImage = async (path) => {
   if (config.verbose) {
@@ -133,15 +161,6 @@ const grabRemoteImages = async (rawContent, outputPath) => {
 module.exports = {
   initArguments: {},
   configFunction: async (eleventyConfig, pluginOptions = {}) => {
-    config = Object.assign({}, config, pluginOptions);
-
-    // check the required config is present
-    if (!config.assetPath || !config.distPath) {
-      throw new Error(
-        "eleventy-plugin-local-images requires that assetPath and distPath are set"
-      );
-    }
-
     eleventyConfig.addTransform("localimages", grabRemoteImages);
   },
 };
