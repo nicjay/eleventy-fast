@@ -34,7 +34,6 @@ const autoprefixer = require("autoprefixer");
 const tailwindcss = require("tailwindcss");
 const tailwindConfig = require("../tailwind.config.js");
 
-
 /**
  * Inlines the CSS.
  * Makes font display display-optional
@@ -46,7 +45,6 @@ const tailwindConfig = require("../tailwind.config.js");
 const optimizeCss = async (rawContent, outputPath) => {
   let content = rawContent;
   if (outputPath && outputPath.endsWith(".html") && !isAmp(content) && !/data-style-override/.test(content)) {
-
     let css = require("fs").readFileSync("css/main.css", { encoding: "utf-8" });
     css = css.replace(/@font-face {/g, "@font-face {font-display:optional;");
 
@@ -56,10 +54,10 @@ const optimizeCss = async (rawContent, outputPath) => {
      * TODO: Consider adding PurgeCSS plugin - has bugs with Tailwind and purge ignore comments not working...
      */
     const postcssPlugins = [
-      tailwindcss({...tailwindConfig, content: [{ raw: content, extension: "html" }]}),
+      tailwindcss({ ...tailwindConfig, content: [{ raw: content, extension: "html" }] }),
       autoprefixer,
       cssnano({ preset: "default" }), //Minify CSS
-    ]
+    ];
 
     await postcss(postcssPlugins)
       .process(css, { from: "css/main.css" })
