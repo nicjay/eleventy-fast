@@ -2,6 +2,7 @@
 #layout: layouts/base.njk
 templateClass: tmpl-post
 ---
+POST HERE
 {% extends "layouts/base.njk" %}
 
 
@@ -20,8 +21,8 @@ templateClass: tmpl-post
 
 <h1>🙏🙏🙏</h1>
 <p>
-  Since you've made it this far, <a href="{{ shareUrl | safe }}" on-click="share">sharing</a> this article on your favorite social media network 
-  would be highly appreciated 💖! For feedback, please 
+  Since you've made it this far, <a href="{{ shareUrl | safe }}" on-click="share">sharing</a> this article on your favorite social media network
+  would be highly appreciated 💖! For feedback, please
   <a href="https://twitter.com/{{ metadata.author.twitterHandle }}" target="_blank" rel="noopener">ping me on Twitter.</a>
 </p>
 
@@ -37,14 +38,14 @@ templateClass: tmpl-post
   "@type": "Article",
   "headline": "{{ title }}",
   "image": [],
-  "author": "{{ metadata.author.name }}", 
-  "genre": "{{ metadata.genre }}", 
+  "author": "{{ metadata.author.name }}",
+  "genre": "{{ metadata.genre }}",
   "publisher": {
     "@type": "Organization",
     "name": "{{ metadata.publisher.name }}",
     "logo": {
       "@type": "ImageObject",
-      "url": "{{ '/img/favicon/favicon-192x192.png' | addHash }}"
+      "url": "{{ 'src/assets/img/favicon/favicon-192x192.png' | addHash }}"
     }
   },
   "url": "{{ metadata.url }}{{ canonicalUrl or page.url }}",

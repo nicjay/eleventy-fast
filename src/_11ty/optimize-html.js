@@ -32,7 +32,7 @@ const purgecss = require("@fullhuman/postcss-purgecss");
 const cssnano = require("cssnano");
 const autoprefixer = require("autoprefixer");
 const tailwindcss = require("tailwindcss");
-const tailwindConfig = require("../tailwind.config.js");
+const tailwindConfig = require("../../tailwind.config.js");
 
 /**
  * Inlines the CSS.
@@ -45,7 +45,7 @@ const tailwindConfig = require("../tailwind.config.js");
 const optimizeCss = async (rawContent, outputPath) => {
   let content = rawContent;
   if (outputPath && outputPath.endsWith(".html") && !isAmp(content) && !/data-style-override/.test(content)) {
-    let css = require("fs").readFileSync("css/main.css", { encoding: "utf-8" });
+    let css = require("fs").readFileSync("src/assets/css/main.css", { encoding: "utf-8" });
     css = css.replace(/@font-face {/g, "@font-face {font-display:optional;");
 
     /**
@@ -60,7 +60,7 @@ const optimizeCss = async (rawContent, outputPath) => {
     ];
 
     await postcss(postcssPlugins)
-      .process(css, { from: "css/main.css" })
+      .process(css, { from: "src/assets/css/main.css" })
       .then((processed) => {
         content = content.replace("</head>", `<style>${processed.css}</style></head>`); //Add inline style
       });
