@@ -4,7 +4,7 @@ export default {
   input: "main.js",
   output: [
     {
-      file: "js/min.js",
+      file: "src/js/min.js",
       format: "iife",
       sourcemap: true,
       plugins: [terser()],

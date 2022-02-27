@@ -149,11 +149,11 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addCollection("tagList", require("./src/_11ty/getTagList"));
   eleventyConfig.addPassthroughCopy({ "src/assets/img": "img" });
   // We need to copy cached.js only if GA is used
-  eleventyConfig.addPassthroughCopy(GA_ID ? "js" : "js/*[!cached].*");
+  eleventyConfig.addPassthroughCopy(GA_ID ? "src/js" : "src/js/*[!cached].*");
   eleventyConfig.addPassthroughCopy({ "src/assets/fonts": "fonts" });
 
   // We need to rebuild upon JS change to update the CSP.
-  eleventyConfig.addWatchTarget("./js/");
+  eleventyConfig.addWatchTarget("./src/js/");
   // We need to rebuild on CSS change to inline it.
   eleventyConfig.addWatchTarget("./src/assets/css/");
   eleventyConfig.addWatchTarget("./tailwind.config.js");
@@ -213,27 +213,13 @@ module.exports = function (eleventyConfig) {
 
   return {
     templateFormats: ["md", "njk", "html", "liquid"],
-
-    // If your site lives in a different subdirectory, change this.
-    // Leading or trailing slashes are all normalized away, so don’t worry about those.
-
-    // If you don’t have a subdirectory, use "" or "/" (they do the same thing)
-    // This is only used for link URLs (it does not affect your file structure)
-    // Best paired with the `url` filter: https://www.11ty.io/docs/filters/url/
-
-    // You can also pass this in on the command line using `--pathprefix`
-    // pathPrefix: "/",
-
     markdownTemplateEngine: "liquid",
     htmlTemplateEngine: "njk",
     dataTemplateEngine: "njk",
-
-    // These are all optional, defaults are shown:
     dir: {
       input: "src",
       includes: "_includes",
       data: "_data",
-      // Warning hardcoded throughout repo. Find and replace is your friend :)
       output: "_site",
     },
   };
