@@ -5,8 +5,7 @@ _site/
 node_modules/
 package-lock.json
 README.md
-_11ty/
+src/_11ty/
 functions
 test
-src
 .oryx_prod_node_modules/

@@ -55,49 +55,39 @@ const pluginSyntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const pluginNavigation = require("@11ty/eleventy-navigation");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
-const GA_ID = require("./_data/metadata.json").googleAnalyticsId;
-const { cspDevMiddleware } = require("./_11ty/apply-csp.js");
+const GA_ID = require("./src/_data/metadata.json").googleAnalyticsId;
+const { cspDevMiddleware } = require("./src/_11ty/apply-csp.js");
 
 module.exports = function (eleventyConfig) {
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
   eleventyConfig.addPlugin(pluginNavigation);
-  eleventyConfig.addPlugin(require("./_11ty/local-images.js"));
-  eleventyConfig.addPlugin(require("./_11ty/img-dim.js"));
-  eleventyConfig.addPlugin(require("./_11ty/json-ld.js"));
-  eleventyConfig.addPlugin(require("./_11ty/optimize-html.js"));
-  eleventyConfig.addPlugin(require("./_11ty/apply-csp.js"));
+  eleventyConfig.addPlugin(require("./src/_11ty/local-images.js"));
+  eleventyConfig.addPlugin(require("./src/_11ty/img-dim.js"));
+  eleventyConfig.addPlugin(require("./src/_11ty/json-ld.js"));
+  eleventyConfig.addPlugin(require("./src/_11ty/optimize-html.js"));
+  eleventyConfig.addPlugin(require("./src/_11ty/apply-csp.js"));
 
   eleventyConfig.setDataDeepMerge(true);
   eleventyConfig.addLayoutAlias("post", "layouts/post.njk");
-  eleventyConfig.addNunjucksAsyncFilter(
-    "addHash",
-    function (absolutePath, callback) {
-      readFile(path.join(".", absolutePath), {
-        encoding: "utf-8",
+  eleventyConfig.addNunjucksAsyncFilter("addHash", function (absolutePath, callback) {
+    readFile(path.join(".", absolutePath), {
+      encoding: "utf-8",
+    })
+      .then((content) => {
+        return hasha.async(content);
       })
-        .then((content) => {
-          return hasha.async(content);
-        })
-        .then((hash) => {
-          callback(null, `${absolutePath}?hash=${hash.substr(0, 10)}`);
-        })
-        .catch((error) => {
-          callback(
-            new Error(`Failed to addHash to '${absolutePath}': ${error}`)
-          );
-        });
-    }
-  );
+      .then((hash) => {
+        callback(null, `${absolutePath}?hash=${hash.substr(0, 10)}`);
+      })
+      .catch((error) => {
+        callback(new Error(`Failed to addHash to '${absolutePath}': ${error}`));
+      });
+  });
 
   async function lastModifiedDate(filename) {
     try {
-      const { stdout } = await execFile("git", [
-        "log",
-        "-1",
-        "--format=%cd",
-        filename,
-      ]);
+      const { stdout } = await execFile("git", ["log", "-1", "--format=%cd", filename]);
       return new Date(stdout);
     } catch (e) {
       console.error(e.message);
@@ -109,31 +99,26 @@ module.exports = function (eleventyConfig) {
   // Cache the lastModifiedDate call because shelling out to git is expensive.
   // This means the lastModifiedDate will never change per single eleventy invocation.
   const lastModifiedDateCache = new Map();
-  eleventyConfig.addNunjucksAsyncFilter(
-    "lastModifiedDate",
-    function (filename, callback) {
-      const call = (result) => {
-        result.then((date) => callback(null, date));
-        result.catch((error) => callback(error));
-      };
-      const cached = lastModifiedDateCache.get(filename);
-      if (cached) {
-        return call(cached);
-      }
-      const promise = lastModifiedDate(filename);
-      lastModifiedDateCache.set(filename, promise);
-      call(promise);
+  eleventyConfig.addNunjucksAsyncFilter("lastModifiedDate", function (filename, callback) {
+    const call = (result) => {
+      result.then((date) => callback(null, date));
+      result.catch((error) => callback(error));
+    };
+    const cached = lastModifiedDateCache.get(filename);
+    if (cached) {
+      return call(cached);
     }
-  );
+    const promise = lastModifiedDate(filename);
+    lastModifiedDateCache.set(filename, promise);
+    call(promise);
+  });
 
   eleventyConfig.addFilter("encodeURIComponent", function (str) {
     return encodeURIComponent(str);
   });
 
   eleventyConfig.addFilter("readableDate", (dateObj) => {
-    return DateTime.fromJSDate(dateObj, { zone: "utc" }).toFormat(
-      "dd LLL yyyy"
-    );
+    return DateTime.fromJSDate(dateObj, { zone: "utc" }).toFormat("dd LLL yyyy");
   });
 
   // https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#valid-date-string
@@ -161,17 +146,17 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addCollection("posts", function (collectionApi) {
     return collectionApi.getFilteredByTag("posts");
   });
-  eleventyConfig.addCollection("tagList", require("./_11ty/getTagList"));
-  eleventyConfig.addPassthroughCopy("img");
+  eleventyConfig.addCollection("tagList", require("./src/_11ty/getTagList"));
+  eleventyConfig.addPassthroughCopy({ "src/assets/img": "img" });
   // We need to copy cached.js only if GA is used
   eleventyConfig.addPassthroughCopy(GA_ID ? "js" : "js/*[!cached].*");
-  eleventyConfig.addPassthroughCopy("fonts");
+  eleventyConfig.addPassthroughCopy({ "src/assets/fonts": "fonts" });
 
   // We need to rebuild upon JS change to update the CSP.
   eleventyConfig.addWatchTarget("./js/");
   // We need to rebuild on CSS change to inline it.
-  eleventyConfig.addWatchTarget("./css/");
-  eleventyConfig.addWatchTarget('./tailwind.config.js')
+  eleventyConfig.addWatchTarget("./src/assets/css/");
+  eleventyConfig.addWatchTarget("./tailwind.config.js");
   // Unfortunately this means .eleventyignore needs to be maintained redundantly.
   // But without this the JS build artefacts doesn't trigger a build.
   eleventyConfig.setUseGitIgnore(false);
@@ -182,7 +167,7 @@ module.exports = function (eleventyConfig) {
     breaks: true,
     linkify: true,
   }).use(markdownItAnchor, {
-    permalink: markdownItAnchor.permalink.headerLink()
+    permalink: markdownItAnchor.permalink.headerLink(),
   });
   eleventyConfig.setLibrary("md", markdownLibrary);
 
@@ -213,10 +198,7 @@ module.exports = function (eleventyConfig) {
       fs.mkdirSync("./_site", { recursive: true });
       fs.writeFileSync("_site/_headers", headers);
     } catch (error) {
-      console.log(
-        "[beforeBuild] Something went wrong with the _headers file\n",
-        error
-      );
+      console.log("[beforeBuild] Something went wrong with the _headers file\n", error);
     }
   });
 
@@ -231,27 +213,13 @@ module.exports = function (eleventyConfig) {
 
   return {
     templateFormats: ["md", "njk", "html", "liquid"],
-
-    // If your site lives in a different subdirectory, change this.
-    // Leading or trailing slashes are all normalized away, so don’t worry about those.
-
-    // If you don’t have a subdirectory, use "" or "/" (they do the same thing)
-    // This is only used for link URLs (it does not affect your file structure)
-    // Best paired with the `url` filter: https://www.11ty.io/docs/filters/url/
-
-    // You can also pass this in on the command line using `--pathprefix`
-    // pathPrefix: "/",
-
     markdownTemplateEngine: "liquid",
     htmlTemplateEngine: "njk",
     dataTemplateEngine: "njk",
-
-    // These are all optional, defaults are shown:
     dir: {
-      input: ".",
+      input: "src",
       includes: "_includes",
       data: "_data",
-      // Warning hardcoded throughout repo. Find and replace is your friend :)
       output: "_site",
     },
   };
