@@ -149,11 +149,11 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addCollection("tagList", require("./src/_11ty/getTagList"));
   eleventyConfig.addPassthroughCopy({ "src/assets/img": "img" });
   // We need to copy cached.js only if GA is used
-  eleventyConfig.addPassthroughCopy(GA_ID ? "src/js" : "src/js/*[!cached].*");
+  eleventyConfig.addPassthroughCopy(GA_ID ? "js" : "js/*[!cached].*");
   eleventyConfig.addPassthroughCopy({ "src/assets/fonts": "fonts" });
 
   // We need to rebuild upon JS change to update the CSP.
-  eleventyConfig.addWatchTarget("./src/js/");
+  eleventyConfig.addWatchTarget("./js/");
   // We need to rebuild on CSS change to inline it.
   eleventyConfig.addWatchTarget("./src/assets/css/");
   eleventyConfig.addWatchTarget("./tailwind.config.js");

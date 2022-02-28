@@ -4,7 +4,7 @@ const { JSDOM } = require("jsdom");
 const readFileSync = require("fs").readFileSync;
 const fs = require("fs");
 const existsSync = require("fs").existsSync;
-const isDev = require("../_data/isdevelopment")();
+const isDev = require("../src/_data/isdevelopment")();
 /**
  * These tests kind of suck and they are kind of useful.
  *
