@@ -4,7 +4,7 @@ title: Tailwind Demo
 templateClass: tmpl-post
 eleventyNavigation:
   key: Tailwind
-  order: 2
+  order: 1
 ---
 
 {% block content %}
