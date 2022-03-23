@@ -73,9 +73,7 @@ exports.handler = function (event, context, callback) {
   const origin = event.headers["origin"] || event.headers["Origin"] || "";
   console.log(`Received ${event.httpMethod} request from, origin: ${origin}`);
 
-  const isOriginallowlisted =
-    originallowlist.indexOf(origin) >= 0 ||
-    origin.endsWith("-upbeat-shirley-608546.netlify.app") >= 0;
+  const isOriginallowlisted = originallowlist.indexOf(origin) >= 0;
   if (!isOriginallowlisted) {
     console.info("Bad origin", origin);
   }
@@ -133,8 +131,8 @@ sr: 1440x900
 vp: 945x777
 je: 0
 _u: blabla~
-jid: 
-gjid: 
+jid:
+gjid:
 cid: 1837873423.1522911810
 tid: UA-116530991-1
 _gid: 1828045325.1524815793

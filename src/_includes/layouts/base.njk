@@ -8,11 +8,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% if isdevelopment %}
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    {% else %}
+
     <link rel="icon" href="{{ 'src/assets/img/favicon/favicon-192x192.png' | addHash }}" type="image/png">
-    {% endif %}
+
     <meta name="theme-color" content="#f9c412">
     <meta name="robots" content="max-snippet:-1, max-image-preview: large, max-video-preview: -1">
     <title>{{ renderData.title or title or metadata.title | escape }}</title>
@@ -57,20 +55,18 @@
   </head>
   <body>
     <header>
-      <nav>
-        <div id="nav" class="flex justify-center">
-          <h1><a href="{{ '/' | url }}" title="Homepage">{{ metadata.title }}</a></h1>
-          {#- Read more about `eleventy-navigation` at https://www.11ty.dev/docs/plugins/navigation/ #}
-          {%- for entry in collections.all | eleventyNavigation %}
-            <div class="max-w-xs px-1 py-1 rounded-lg border-2"><a class="underline text-slate-700" href="{{ entry.url | url }}">{{ entry.title }}</a></div>
-          {%- endfor %}
-        </div>
-      </nav>
-      <div class="p-4 m-4 bg-emerald-300 h-full">
-          <h1 text-green-900>{{ title }}</h1>
+      <div class="w-full backdrop-blur flex-none border-b-2 py-3">
+        <div class=" max-w-7xl mx-auto flex flex-row justify-between text-base">
+            <h1><a class="text-slate-600 text-lg font-semibold" href="{{ '/' | url }}" title="Homepage">{{ metadata.title }}</a></h1>
+            {#- Read more about `eleventy-navigation` at https://www.11ty.dev/docs/plugins/navigation/ #}
+            <nav>
+              {%- for entry in collections.all | eleventyNavigation %}
+                <a class="text-blue-700 hover:text-amber-500 px-2" href="{{ entry.url | url }}">{{ entry.title }}</a>
+              {%- endfor %}
+            <nav>
+        </nav>
       </div>
-      {% block extraArticleHeader %}{% endblock %}
-      <dialog id="message"></dialog>
+
       {% if googleanalytics %}
       <noscript>
         <img src="/.netlify/functions/ga?v=1&_v=j83&t=pageview&dr=https%3A%2F%2Fno-script.com&_s=1&dh={{ metadata.domain | encodeURIComponent }}&dp={{ page.url | encodeURIComponent }}&ul=en-us&de=UTF-8&dt={{title|encodeURIComponent}}&tid={{googleanalytics}}" width="1" height="1"
@@ -79,20 +75,34 @@
       {% endif %}
     </header>
 
-    <main>
-      <article>
-        {% block article %}
-          {{ content | safe }}
-        {% endblock %}
+    <div class="max-w-7xl mx-auto">
 
-        {% if page.url and page.url.indexOf("/posts/") > -1 %}
-          <p>Published <time datetime="{{ page.date | htmlDateString }}">{{ page.date | readableDate }}</time></p>
-        {% endif %}
-      </article>
-    </main>
+      <h1 class="bg-green-200 my-2 p-2 rounded text-center">{{ title }}</h1>
+
+      {% block extraArticleHeader %}{% endblock %}
+
+      <dialog id="message"></dialog>
+
+      <main>
+        <article>
+          {% block article %}
+            {{ content | safe }}
+          {% endblock %}
+
+          {% if page.url and page.url.indexOf("/posts/") > -1 %}
+            <p>Published <time datetime="{{ page.date | htmlDateString }}">{{ page.date | readableDate }}</time></p>
+          {% endif %}
+        </article>
+      </main>
+
+    </div>
+
+
 
     <footer>
-      <a href="/about/">{{ metadata.author.name }}</a>
+      <div class="max-w-7xl mx-auto">
+        <a href="/about/">{{ metadata.author.name }}</a>
+      </div>
     </footer>
 
     <!-- Current page: {{ page.url | url }} -->
