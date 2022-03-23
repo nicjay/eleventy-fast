@@ -96,13 +96,26 @@ header aside {
   font-style: italic;
 }
 
-#nav {
-  z-index: 2;
-  position: relative;
-}
-
 #posts li {
   margin-bottom: 0.5em;
+}
+
+/* Direct Links / Markdown Headers */
+.direct-link {
+  font-family: sans-serif;
+  text-decoration: none;
+  font-style: normal;
+  margin-left: .1em;
+}
+a[href].direct-link,
+a[href].direct-link:visited {
+  color: transparent;
+}
+a[href].direct-link:focus,
+a[href].direct-link:focus:visited,
+:hover > a[href].direct-link,
+:hover > a[href].direct-link:visited {
+  color: #aaa;
 }
 
 /* https://github.com/rsms/inter/blob/master/LICENSE.txt

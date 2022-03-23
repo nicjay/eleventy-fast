@@ -54,6 +54,7 @@ const pluginRss = require("@11ty/eleventy-plugin-rss");
 const pluginSyntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const pluginNavigation = require("@11ty/eleventy-navigation");
 const markdownIt = require("markdown-it");
+const markdownItAnchor = require("markdown-it-anchor");
 const GA_ID = require("./src/_data/metadata.json").googleAnalyticsId;
 const { cspDevMiddleware } = require("./src/_11ty/apply-csp.js");
 
@@ -165,6 +166,14 @@ module.exports = function (eleventyConfig) {
     html: true,
     breaks: true,
     linkify: true,
+  }).use(markdownItAnchor, {
+    permalink: markdownItAnchor.permalink.ariaHidden({
+      placement: "after",
+      class: "direct-link",
+      symbol: "#",
+      level: [1,2,3,4],
+    }),
+    slugify: eleventyConfig.getFilter("slug")
   });
   eleventyConfig.setLibrary("md", markdownLibrary);
 
