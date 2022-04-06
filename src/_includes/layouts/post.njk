@@ -4,19 +4,26 @@ templateClass: tmpl-post
 ---
 {% extends "layouts/base.njk" %}
 
-{% block extraArticleHeader %}
-   {% set wc = content | striptags | wordcount %}
-   {% set wPerMinute = (wc / 240) + 1 %}
-   <aside class="text-center">
-     {{ wPerMinute | round }} min read.
-   </aside>
-{% endblock %}
-
 {% set shareUrl = metadata.url + page.url %}
 
 {% block article %}
 
-  <div class="mt-16 mx-auto prose prose-slate prose-headings:text-indigo-500 prose-a:text-teal-600 hover:prose-a:text-teal-500">
+  <div class="mt-12 mx-auto max-w-4xl prose prose-slate prose-headings:text-indigo-500 prose-a:text-teal-600 hover:prose-a:text-teal-500 prose-img:max-w-xl prose-img:mx-auto prose-h1:text-slate-50 prose-code:before:content-none prose-code:after:content-none">
+
+    <div class="relative pt-16 pb-1 bg-[url({{ image }})] bg-center bg-cover rounded text-slate-50">
+      {% set wc = content | striptags | wordcount %}
+      {% set wPerMinute = (wc / 240) + 1 %}
+      <aside class="absolute top-2 right-2 backdrop-blur rounded">
+        {{ wPerMinute | round }} min read
+      </aside>
+
+      <h1 class="stroke-text pl-4">{{ title }}</h1>
+
+
+    </div>
+
+    <p class="stroke-text">{{ description }}</p>
+
     {{ content | safe }}
 
     <h1>🙏🙏🙏</h1>

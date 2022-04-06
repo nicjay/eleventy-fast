@@ -53,6 +53,7 @@ const execFile = promisify(require("child_process").execFile);
 const pluginRss = require("@11ty/eleventy-plugin-rss");
 const pluginSyntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const pluginNavigation = require("@11ty/eleventy-navigation");
+const prismTreeview = require("prismjs/plugins/treeview/prism-treeview");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
 const GA_ID = require("./src/_data/metadata.json").googleAnalyticsId;
@@ -62,7 +63,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
   eleventyConfig.addPlugin(pluginNavigation);
-  eleventyConfig.addPlugin(require("./src/_11ty/local-images.js"));
+  //eleventyConfig.addPlugin(require("./src/_11ty/local-images.js"));
   eleventyConfig.addPlugin(require("./src/_11ty/img-dim.js"));
   eleventyConfig.addPlugin(require("./src/_11ty/json-ld.js"));
   eleventyConfig.addPlugin(require("./src/_11ty/optimize-html.js"));
