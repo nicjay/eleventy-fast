@@ -32,11 +32,11 @@ const purgecss = require("@fullhuman/postcss-purgecss");
 const cssnano = require("cssnano");
 const autoprefixer = require("autoprefixer");
 const tailwindcss = require("tailwindcss");
+const atImport = require("postcss-import");
 const tailwindConfig = require("../../tailwind.config.js");
 
 /**
  * Inlines the CSS.
- * Makes font display display-optional
  * Minifies and optimizes the JS
  * Optimizes HTML
  * Optimizes AMP
@@ -46,24 +46,28 @@ const optimizeCss = async (rawContent, outputPath) => {
   let content = rawContent;
   if (outputPath && outputPath.endsWith(".html") && !isAmp(content) && !/data-style-override/.test(content)) {
     let css = require("fs").readFileSync("src/assets/css/main.css", { encoding: "utf-8" });
-    css = css.replace(/@font-face {/g, "@font-face {font-display:optional;");
 
-    /**
-     * Shallow copy Tailwind's config, merging 11ty raw content
-     * See: https://tailwindcss.com/docs/content-configuration#configuring-raw-content
-     * TODO: Consider adding PurgeCSS plugin - has bugs with Tailwind and purge ignore comments not working...
-     */
-    const postcssPlugins = [
-      tailwindcss({ ...tailwindConfig, content: [{ raw: content, extension: "html" }] }),
-      autoprefixer,
-      cssnano({ preset: "default" }), //Minify CSS
-    ];
+    const processor = postcss([
+          atImport(),
+          tailwindcss({
+            // Shallow copy config, merging 11ty raw content.
+            // https://tailwindcss.com/docs/content-configuration#configuring-raw-content
+            ...tailwindConfig,
+            content: [{ raw: content, extension: "html" }] }),
+          purgecss({
+            content: [{ raw: content, extension: "html" }],
+            css: [{ raw: css }],
+            safelist: [/^prose/, /^hover/] //Play nice with Tailwind typography
+          }),
+          autoprefixer,
+          cssnano({ preset: "default" })
+        ]);
 
-    await postcss(postcssPlugins)
+    await processor
       .process(css, { from: "src/assets/css/main.css" })
       .then((processed) => {
         content = content.replace("</head>", `<style>${processed.css}</style></head>`); //Add inline style
-      });
+    });
   }
 
   return content;
