@@ -15,15 +15,16 @@
   color: red;
 }
 
-/*
-  Make image rasterization lazy. This means that e.g. the cost of the
-  blurry placeholder is never paid if images load before entering
-  the viewport.
-  Context
-  - https://web.dev/content-visibility/#skipping-rendering-work-with-content-visibility
- */
-main img {
-  content-visibility: auto;
+/* Blur placeholder image, fades out on real image load */
+.lazy-img {
+  filter: blur(4px);
+  transition: filter 0.25s ease-in;
+  //content-visibility: auto;
+}
+
+/* purgecss ignore */
+.lazy-picture[data-loaded] .lazy-img {
+  filter: unset;
 }
 
 /* Avoid the header hiding the content on anchor scroll. */
@@ -112,10 +113,10 @@ html {
   }
 }
 */
-@font-face {
+/* @font-face {
   font-display: optional;
   font-family: "Inter UI";
   font-weight: 100 900;
   font-style: oblique 0deg 10deg;
   src: url("/fonts/Inter-3.19.var.woff2") format("woff2");
-}
+} */

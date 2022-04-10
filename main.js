@@ -217,22 +217,47 @@ addEventListener("click", (e) => {
   fn(handler);
 });
 
-function removeBlurredImage(img) {
-  // Ensure the browser doesn't try to draw the placeholder when the real image is present.
-  img.style.backgroundImage = "none";
-}
-document.body.addEventListener(
-  "load",
-  (e) => {
-    if (e.target.tagName != "IMG") {
-      return;
+//Lazy loading images - replace placeholder when user scrolls over image
+const lazyLoad = (targets, onIntersection) => {
+  const observer = new IntersectionObserver((entries, self) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        onIntersection(entry.target);
+        self.unobserve(entry.target);
+      }
+    });
+  });
+  targets.forEach((target) => observer.observe(target));
+};
+
+//Ensure lazyLoad executes only after page render
+addEventListener("load", (e) => {
+
+  const lazyPictures = document.querySelectorAll('.lazy-picture');
+
+  lazyLoad(lazyPictures, (pictureElement) => {
+    const img = pictureElement.querySelector('img');
+    const sources = pictureElement.querySelectorAll('source');
+    // Cleanup tasks after the image loads. Important to
+    // define this handler before setting src/srcsets.
+    img.onload = () => {
+      pictureElement.dataset.loaded = true;
+      img.removeAttribute('data-src');
+    };
+    img.onerror = () => {
+      pictureElement.dataset.loaded = false;
     }
-    removeBlurredImage(e.target);
-  },
-  /* capture */ "true"
-);
-for (let img of document.querySelectorAll("img")) {
-  if (img.complete) {
-    removeBlurredImage(img);
-  }
-}
+
+    // Swap in the media sources
+    sources.forEach((source) => {
+      source.sizes = source.dataset.sizes;
+      source.srcset = source.dataset.srcset;
+      source.removeAttribute('data-srcset');
+      source.removeAttribute('data-sizes');
+    });
+
+    // Swap in the image
+    img.src = img.dataset.src;
+  });
+
+});
