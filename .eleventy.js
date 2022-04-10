@@ -63,8 +63,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
   eleventyConfig.addPlugin(pluginNavigation);
-  //eleventyConfig.addPlugin(require("./src/_11ty/local-images.js"));
-  eleventyConfig.addPlugin(require("./src/_11ty/img-dim.js"));
+  eleventyConfig.addPlugin(require("./src/_11ty/lazy-image.js"));
   eleventyConfig.addPlugin(require("./src/_11ty/json-ld.js"));
   eleventyConfig.addPlugin(require("./src/_11ty/optimize-html.js"));
   eleventyConfig.addPlugin(require("./src/_11ty/apply-csp.js"));
@@ -148,7 +147,6 @@ module.exports = function (eleventyConfig) {
     return collectionApi.getFilteredByTag("posts");
   });
   eleventyConfig.addCollection("tagList", require("./src/_11ty/getTagList"));
-  eleventyConfig.addPassthroughCopy({ "src/assets/img": "img" });
   // We need to copy cached.js only if GA is used
   eleventyConfig.addPassthroughCopy(GA_ID ? "js" : "js/*[!cached].*");
   eleventyConfig.addPassthroughCopy({ "src/assets/fonts": "fonts" });

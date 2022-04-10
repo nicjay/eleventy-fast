@@ -39,7 +39,7 @@ const jsonLd = (rawContent, outputPath) => {
     }
 
     const images = [
-      ...dom.window.document.querySelectorAll("main img,amp-img"),
+      ...dom.window.document.querySelectorAll("main img"),
     ];
     try {
       const obj = JSON.parse(jsonLd.textContent);
