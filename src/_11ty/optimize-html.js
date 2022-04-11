@@ -8,10 +8,8 @@ const atImport = require("postcss-import");
 const tailwindConfig = require("../../tailwind.config.js");
 
 /**
- * Inlines the CSS.
- * Minifies and optimizes the JS
- * Optimizes HTML
- * Optimizes AMP
+ * Purges/minifies/inlines CSS.
+ * Minifies HTML
  */
 
 const optimizeCss = async (rawContent, outputPath) => {

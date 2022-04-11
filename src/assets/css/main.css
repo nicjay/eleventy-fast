@@ -15,18 +15,6 @@
   color: red;
 }
 
-/* Blur placeholder image, fades out on real image load */
-.lazy-img {
-  filter: blur(4px);
-  transition: filter 0.25s ease-in;
-  //content-visibility: auto;
-}
-
-/* purgecss ignore */
-.lazy-picture[data-loaded] .lazy-img {
-  filter: unset;
-}
-
 /* Avoid the header hiding the content on anchor scroll. */
 article * {
   scroll-margin-top: 50px;
@@ -60,13 +48,13 @@ share-widget {
 share-widget div {
   width: 30px;
   height: 30px;
-  background-image: url("/img/share.svg");
+  background-image: url("/assets/img/share.svg");
   background-repeat: no-repeat;
   background-position: center;
 }
 
 .apple share-widget div {
-  background-image: url("/img/share-apple.svg");
+  background-image: url("/assets/img/share-apple.svg");
 }
 
 share-widget button {

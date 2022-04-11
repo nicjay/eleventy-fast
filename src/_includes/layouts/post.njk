@@ -11,7 +11,7 @@ templateClass: tmpl-post
   <div class="mt-12 mx-auto max-w-4xl prose prose-slate prose-headings:text-indigo-500 prose-a:text-teal-600 hover:prose-a:text-teal-500 prose-img:max-w-xl prose-img:mx-auto prose-h1:text-slate-50 prose-code:before:content-none prose-code:after:content-none">
 
     {% if image %}
-      {% imageNjk image | url, title %}
+      {% image image | url, title, false %}
     {% endif %}
 
     <div class="">
