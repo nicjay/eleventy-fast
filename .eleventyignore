@@ -6,6 +6,5 @@ node_modules/
 package-lock.json
 README.md
 src/_11ty/
-functions
 test
 .oryx_prod_node_modules/

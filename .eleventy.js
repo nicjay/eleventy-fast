@@ -56,7 +56,6 @@ const pluginNavigation = require("@11ty/eleventy-navigation");
 const prismTreeview = require("prismjs/plugins/treeview/prism-treeview");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
-const GA_ID = require("./src/_data/metadata.json").googleAnalyticsId;
 const { cspDevMiddleware } = require("./src/_11ty/apply-csp.js");
 
 module.exports = function (eleventyConfig) {
@@ -147,8 +146,6 @@ module.exports = function (eleventyConfig) {
     return collectionApi.getFilteredByTag("posts");
   });
   eleventyConfig.addCollection("tagList", require("./src/_11ty/getTagList"));
-  // We need to copy cached.js only if GA is used
-  eleventyConfig.addPassthroughCopy(GA_ID ? "js" : "js/*[!cached].*");
   eleventyConfig.addPassthroughCopy({ "src/assets/fonts": "fonts" });
   eleventyConfig.addPassthroughCopy({ "src/assets/img": "assets/img" }); //TODO reconsider filepaths
   // We need to rebuild upon JS change to update the CSP.
