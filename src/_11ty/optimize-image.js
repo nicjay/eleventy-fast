@@ -8,7 +8,7 @@ const path = require("path");
  * Sets native async decoding
  */
 
-const processImage = async (src, alt, lazy = true, sizes = '100vw') => {
+const processImage = async (src, alt, isLazy = true, sizes = '100vw') => {
 
   const imageSource = isRemote(src) ? src : path.join('src', src);
 
@@ -22,7 +22,7 @@ const processImage = async (src, alt, lazy = true, sizes = '100vw') => {
   const imageAttributes = {
     alt,
     sizes,
-    loading: lazy ? "lazy" : "eager", // Avoid lazy-loading images that are in the first visible viewport
+    loading: isLazy ? "lazy" : "eager", // Avoid lazy-loading images that are in the first visible viewport
     decoding: "async",
   };
 
