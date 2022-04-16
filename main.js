@@ -113,3 +113,17 @@ addEventListener("click", (e) => {
   }
   fn(handler);
 });
+
+//Dark mode toggle. Initial theme set in prerender.js
+const buttonTheme = document.querySelector("#btn-theme");
+
+buttonTheme.addEventListener("click", (e) => {
+  const htmlClassList = document.documentElement.classList;
+  if (htmlClassList.contains('dark')) {
+    htmlClassList.remove('dark');
+    localStorage.theme = 'light';
+  } else {
+    htmlClassList.add('dark');
+    localStorage.theme = 'dark';
+  }
+})

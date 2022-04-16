@@ -146,6 +146,7 @@ module.exports = function (eleventyConfig) {
     return collectionApi.getFilteredByTag("posts");
   });
   eleventyConfig.addCollection("tagList", require("./src/_11ty/getTagList"));
+  eleventyConfig.addPassthroughCopy("js");
   eleventyConfig.addPassthroughCopy({ "src/assets/fonts": "fonts" });
   eleventyConfig.addPassthroughCopy({ "src/assets/img": "assets/img" }); //TODO reconsider filepaths
   // We need to rebuild upon JS change to update the CSP.

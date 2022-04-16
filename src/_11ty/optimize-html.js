@@ -27,7 +27,7 @@ const optimizeCss = async (rawContent, outputPath) => {
           purgecss({
             content: [{ raw: content, extension: "html" }],
             css: [{ raw: css }],
-            safelist: [/^prose/, /^hover/] // Play nice with Tailwind typography
+            safelist: [/^prose/, /^hover/, /^dark/] // Play nice with Tailwind typography and dark mode, but kind of hacky
           }),
           autoprefixer,
           cssnano({ preset: "default" })
