@@ -1,5 +1,6 @@
 module.exports = {
   content: [],
+  darkMode: 'class',
   theme: {
     fontFamily: {
       sans: ["Graphik", "sans-serif"],

@@ -5,6 +5,11 @@
 @tailwind utilities;
 /*! purgecss end ignore */
 
+/* Prevent layout shift when scrollbar present */
+html {
+  scrollbar-gutter: stable both-edges;
+}
+
 /* Color customization */
 :root {
   --primary: #f9c412;
@@ -38,32 +43,21 @@ header nav {
 }
 /*! purgecss end ignore */
 
+html:not([class="dark"]) .light--hidden {
+    display: none;
+}
+
+html[class="dark"] .dark--hidden {
+    display: none;
+}
+
 share-widget {
   position: fixed;
-  right: 20px;
+  right: 30px;
   bottom: 20px;
   opacity: 0.9;
 }
 
-share-widget div {
-  width: 30px;
-  height: 30px;
-  background-image: url("/assets/img/share.svg");
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-.apple share-widget div {
-  background-image: url("/assets/img/share-apple.svg");
-}
-
-share-widget button {
-  margin: 0;
-}
-
-share-widget button:active {
-  transform: scale(1.2);
-}
 
 .stroke-text {
   -webkit-text-stroke: 1px black;

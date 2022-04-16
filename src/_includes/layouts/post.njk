@@ -8,7 +8,13 @@ templateClass: tmpl-post
 
 {% block article %}
 
-  <div class="mt-12 mx-auto max-w-4xl prose prose-slate prose-headings:text-indigo-500 prose-a:text-teal-600 hover:prose-a:text-teal-500 prose-img:max-w-xl prose-img:mx-auto prose-h1:text-slate-50 prose-code:before:content-none prose-code:after:content-none">
+  <div class="
+    mt-12 mx-auto max-w-4xl
+    prose prose-slate dark:prose-invert
+    prose-headings:text-indigo-500 prose-h1:text-slate-50 prose-a:text-teal-600 hover:prose-a:text-teal-500
+    dark:prose-headings:text-orange-500 dark:prose-h1:text-orange-700
+    prose-img:max-w-xl prose-img:mx-auto
+    prose-code:before:content-none prose-code:after:content-none">
 
     {% if image %}
       {% image image | url, title, false %}
@@ -38,8 +44,10 @@ templateClass: tmpl-post
   </div>
 
   <share-widget>
-    <button on-click="share" aria-label="Share" href="{{ shareUrl | safe }}">
-      <div></div>
+    <button on-click="share" aria-label="Share" href="{{ shareUrl | safe }}" class="hover:scale-125">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 scale-150 dark:stroke-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+      </svg>
     </button>
   </share-widget>
 
