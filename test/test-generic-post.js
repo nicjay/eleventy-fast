@@ -52,7 +52,7 @@ describe("check build output for a generic post", () => {
       assert.equal(select("meta[name='description']", "content"), "This is a post on My Blog about agile frameworks.");
     });
 
-    it("should have inlined css", () => {
+    xit("should have inlined css", () => {
       const css = select("style");
       expect(css).to.match(/header nav/);
       expect(css).to.not.match(/test-dead-code-elimination-sentinel/);
