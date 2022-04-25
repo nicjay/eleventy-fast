@@ -10,45 +10,26 @@ html {
   scrollbar-gutter: stable both-edges;
 }
 
-/* Color customization */
-:root {
-  --primary: #f9c412;
-  --primary-dark: #e7bf60;
+/* Disable <a> children mouseovers, avoids duplicate prefetching in JS */
+a * {
+  pointer-events: none;
 }
 
-.test-dead-code-elimination-sentinel {
-  color: red;
+/* Hidden in light mode */
+html:not([class="dark"])
+.light--hidden {
+  display: none;
 }
 
-/* Avoid the header hiding the content on anchor scroll. */
-article * {
-  scroll-margin-top: 50px;
+/* Hidden in dark mode */
+html[class="dark"]
+.dark--hidden {
+  display: none;
 }
 
-/* "Content-visibility: auto" move the images over the other elements
-   Set z-index to keep the nav over the rasterized images */
-header nav {
-  z-index: 1;
-}
-
-/*! purgecss start ignore */
-:root {
-  --main-width: calc(100vw - 3em);
-}
-
-@media (min-width: 37.5em) {
-  :root {
-    --main-width: calc(37.5em - 3em);
-  }
-}
-/*! purgecss end ignore */
-
-html:not([class="dark"]) .light--hidden {
-    display: none;
-}
-
-html[class="dark"] .dark--hidden {
-    display: none;
+/* Dim images in dark mode */
+html[class="dark"] img {
+  filter: brightness(.9);
 }
 
 share-widget {
@@ -56,11 +37,6 @@ share-widget {
   right: 30px;
   bottom: 20px;
   opacity: 0.9;
-}
-
-
-.stroke-text {
-  -webkit-text-stroke: 1px black;
 }
 
 /* Direct Links / Markdown Headers */
@@ -81,24 +57,7 @@ a[href].direct-link:focus:visited,
   color: #aaa;
 }
 
-/* --------------------------------------------------------------------------
-Single variable font.
-
-Note that you may want to do something like this to make sure you're serving
-constant fonts to older browsers:
-html {
-  font-family: 'Inter UI', sans-serif;
+/* Used only for unit test to ensure PurgeCSS removal  */
+.test-dead-code-elimination-sentinel {
+  color: red;
 }
-@supports (font-variation-settings: normal) {
-  html {
-    font-family: 'Inter UI var', sans-serif;
-  }
-}
-*/
-/* @font-face {
-  font-display: optional;
-  font-family: "Inter UI";
-  font-weight: 100 900;
-  font-style: oblique 0deg 10deg;
-  src: url("/fonts/Inter-3.19.var.woff2") format("woff2");
-} */
