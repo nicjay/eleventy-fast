@@ -1,0 +1,19 @@
+<header class="w-full backdrop-blur border-b-2 py-3">
+    <div class="max-w-7xl mx-auto flex flex-row justify-between text-base">
+        <h1>
+            <a class="text-slate-600 text-lg font-semibold" href="{{ '/' | url }}" title="Homepage">{{ metadata.title }}</a>
+        </h1>
+        <nav class="flex flex-row content-center">
+            <a href="{{ '/' | url }}" title="Homepage" class="hover:scale-125">
+                {% include "src/assets/img/home.svg" %}
+            </a>
+            {%- for entry in collections.all | eleventyNavigation %}
+            <a class="text-blue-700 hover:text-amber-500 px-2" href="{{ entry.url | url }}">{{ entry.title }}</a>
+            {%- endfor %}
+            <button id="btn-theme" aria-label="Toggle site theme" class="hover:scale-125">
+                {% include "src/assets/img/sun.svg" %}
+                {% include "src/assets/img/moon.svg" %}
+            </button>
+        </nav>
+    </div>
+</header>

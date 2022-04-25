@@ -1,8 +1,27 @@
-<ul>
-{% for post in postslist | reverse %}
-  <li>
-    <a href="{{ post.url | url }}">{% if post.data.title %}{{ post.data.title }}{% else %}<code>{{ post.url }}</code>{% endif %}</a>
-    <time  datetime="{{ post.date | htmlDateString }}">{{ post.date | readableDate }}</time>
-  </li>
-{% endfor %}
-</ul>
+{# Get latest six posts #}
+{% set length = collections.posts.length if collections.posts.length < 6 else 6 %}
+{# {% set postslist = (collections.posts | reverse).slice(0, length) %} #}
+{% set postslist = (collections.posts).slice(0, length) %}
+
+<div class="flex flex-wrap max-w-5xl mx-auto">
+    {% for post in postslist | reverse %}
+    <div class="w-full sm:w-1/2 md:w-1/3 px-2 my-2">
+        <div class="border-2 p-4">
+            <a href="{{ post.url | url }}" class="flex flex-col h-60">
+                <div class="h-40 overflow-clip">
+                    {% if post.data.image %}
+                    {% image post.data.image | url, post.data.title, false %}
+                    {% else %}
+                    {% image 'https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg' | url, 'Placeholder', false %}
+                    {% endif %}
+                </div>
+                <div class="h-20">
+                    {{ post.data.title }}
+                    <time datetime="{{ post.date | htmlDateString }}">{{ post.date | readableDate }}</time>
+                    <p>{{ post.data.description }}</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>

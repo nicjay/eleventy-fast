@@ -24,11 +24,11 @@ const optimizeCss = async (rawContent, outputPath) => {
             // https://tailwindcss.com/docs/content-configuration#configuring-raw-content
             ...tailwindConfig,
             content: [{ raw: content, extension: "html" }] }),
-          purgecss({
-            content: [{ raw: content, extension: "html" }],
-            css: [{ raw: css }],
-            safelist: [/^prose/, /^hover/, /^dark/] // Play nice with Tailwind typography and dark mode, but kind of hacky
-          }),
+          // purgecss({
+          //   content: [{ raw: content, extension: "html" }],
+          //   css: [{ raw: css }],
+          //   safelist: [/^prose/, /^hover/, /^dark/] // Play nice with Tailwind typography and dark mode, but kind of hacky
+          // }),
           autoprefixer,
           cssnano({ preset: "default" })
         ]);

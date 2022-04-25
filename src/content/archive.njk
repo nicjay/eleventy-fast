@@ -1,9 +1,19 @@
 ---
-layout: layouts/home.njk
-permalink: /posts/
+layout: layouts/base.njk
+title: Posts
+templateClass: tmpl-post
+eleventyNavigation:
+  key: Posts
+  order: 1
 ---
-
 <h1>Archive</h1>
 
 {% set postslist = collections.posts %}
-{% include "postslist.njk" %}
+<ul>
+    {% for post in postslist | reverse %}
+    <li>
+        <a href="{{ post.url | url }}">{% if post.data.title %}{{ post.data.title }}{% else %}<code>{{ post.url }}</code>{% endif %}</a>
+        <time datetime="{{ post.date | htmlDateString }}">{{ post.date | readableDate }}</time>
+    </li>
+    {% endfor %}
+</ul>
