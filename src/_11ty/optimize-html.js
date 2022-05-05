@@ -15,29 +15,36 @@ const tailwindConfig = require("../../tailwind.config.js");
 const optimizeCss = async (rawContent, outputPath) => {
   let content = rawContent;
   if (outputPath && outputPath.endsWith(".html") && !/data-style-override/.test(content)) {
-    let css = require("fs").readFileSync("src/assets/css/main.css", { encoding: "utf-8" });
 
-    const processor = postcss([
-          atImport,
-          tailwindcss({
+    let cssMain = require("fs").readFileSync("src/assets/css/main.css", { encoding: "utf-8" });
+    let cssTailwind = require("fs").readFileSync("src/assets/css/tailwind.css", { encoding: "utf-8" });
+
+    const processMain = postcss([
+        atImport,
+        purgecss({
+            content: [{ raw: content, extension: "html" }],
+            css: [{ raw: cssMain }],
+          }),
+        autoprefixer,
+        cssnano({ preset: "default" })
+    ]).process(cssMain, { from: "src/assets/css/main.css" });
+
+    //Process Tailwind separately to avoid PurgeCSS issues
+    const processTailwind = postcss([
+        tailwindcss({
             // Shallow copy config, merging 11ty raw content.
             // https://tailwindcss.com/docs/content-configuration#configuring-raw-content
             ...tailwindConfig,
             content: [{ raw: content, extension: "html" }] }),
-          // purgecss({
-          //   content: [{ raw: content, extension: "html" }],
-          //   css: [{ raw: css }],
-          //   safelist: [/^prose/, /^hover/, /^dark/] // Play nice with Tailwind typography and dark mode, but kind of hacky
-          // }),
-          autoprefixer,
-          cssnano({ preset: "default" })
-        ]);
+        autoprefixer,
+        cssnano({ preset: "default" })
+    ]).process(cssTailwind, { from: "src/assets/css/tailwind.css" });;
 
-    await processor
-      .process(css, { from: "src/assets/css/main.css" })
-      .then((processed) => {
-        content = content.replace("</head>", `<style>${processed.css}</style></head>`); // Add inline style
-    });
+    await Promise.all([processMain, processTailwind]).then((values) => {
+        const css = values.map(value => value.css).join('');
+        content = content.replace("</head>", `<style>${css}</style></head>`); // Add inline style
+    })
+
   }
 
   return content;
