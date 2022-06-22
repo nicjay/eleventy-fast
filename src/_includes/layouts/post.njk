@@ -8,7 +8,7 @@ templateClass: tmpl-post
 {% block article %}
 
 <div class="
-    mt-12 mx-auto max-w-4xl
+    mt-12 mx-auto max-w-3xl
     prose prose-slate dark:prose-invert
     prose-headings:text-indigo-500 prose-h1:text-indigo-500 prose-a:text-teal-600 hover:prose-a:text-teal-500
     dark:prose-headings:text-orange-500 dark:prose-h1:text-orange-700
@@ -38,6 +38,14 @@ templateClass: tmpl-post
         would be highly appreciated 💖! For feedback, please
         <a href="https://twitter.com/{{ metadata.author.twitterHandle }}" target="_blank" rel="noopener">ping me on Twitter.</a>
     </p> #}
+    <script src="https://utteranc.es/client.js"
+        repo="nicjay/njordan.dev"
+        issue-term="pathname"
+        label="comment"
+        theme="preferred-color-scheme"
+        crossorigin="anonymous"
+        async>
+    </script>
 </div>
 
 <share-widget>
