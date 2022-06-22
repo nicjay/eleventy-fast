@@ -60,7 +60,7 @@ describe("check build output for a generic post", () => {
 
     it("should have script elements", () => {
       const scripts = doc.querySelectorAll("script[src]");
-      expect(scripts).to.have.length(2); // NOTE: update this when adding more <script>
+      expect(scripts).to.have.length(3); // NOTE: update this when adding more <script>
       expect(scripts[0].getAttribute("src")).to.match(/^\/js\/min\.js\?hash=\w+/);
     });
 

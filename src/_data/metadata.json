@@ -1,18 +1,18 @@
 {
   "title": "Nick Jordan",
-  "url": "https://update-me.com",
-  "domain": "update-me.com",
+  "url": "https://njordan.dev",
+  "domain": "njordan.dev",
   "description": "Description of the website. Update me.",
   "genre": "Insert a schema.org genre",
   "feed": {
     "subtitle": "Subtitle. Update me.",
     "filename": "feed.xml",
     "path": "/feed/feed.xml",
-    "id": "https://update-me.com"
+    "id": "https://njordan.dev"
   },
   "jsonfeed": {
     "path": "/feed/feed.json",
-    "url": "https://update-me.com/feed/feed.json"
+    "url": "https://njordan.dev/feed/feed.json"
   },
   "author": {
     "name": "Author Name. Update me.",

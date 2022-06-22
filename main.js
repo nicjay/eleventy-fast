@@ -109,11 +109,32 @@ const buttonTheme = document.querySelector("#btn-theme");
 
 buttonTheme.addEventListener("click", (e) => {
   const htmlClassList = document.documentElement.classList;
+  const message = {
+    type: 'set-theme',
+  };
   if (htmlClassList.contains('dark')) {
     htmlClassList.remove('dark');
     localStorage.theme = 'light';
+    message.theme = 'github-light'
   } else {
     htmlClassList.add('dark');
     localStorage.theme = 'dark';
+    message.theme = 'github-dark'
   }
-})
+
+  const iframe = document.querySelector('.utterances-frame');
+  iframe.contentWindow.postMessage(message, 'https://utteranc.es');
+});
+
+// wait for utterances to load and send its first message.
+addEventListener('message', event => {
+    if (event.origin !== 'https://utteranc.es') {
+      return;
+    }
+    const message = {
+      type: 'set-theme',
+      theme: localStorage.theme == 'dark' ? 'github-dark' : 'github-light'
+    };
+    const utterances = event.source;// document.querySelector('iframe').contentWindow; // try event.source instead
+    utterances.postMessage(message, 'https://utteranc.es');
+  });
